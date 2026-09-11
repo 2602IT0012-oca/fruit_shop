@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "mypage/show"
+  devise_for :users
   get "products/new" #　商品登録
   post 'products', to: 'products#create'  # 登録
   get 'products', to: 'products#index' #　商品一覧
@@ -8,6 +10,17 @@ Rails.application.routes.draw do
   delete 'products/:id', to: 'products#destroy', as: 'destroy_product'
   root to: "homes#top" #　トップページ
   resources :products
+  resources :mypage, only: [:show] # ユーザ情報の詳細表示
+
+  # 注文入力・注文作成
+  resources :orders, only: [:index, :new, :create] do 
+   collection do
+     post :confirm   # 注文確認
+   end
+   member do
+     get :complete  # 注文完了
+   end
+ end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
