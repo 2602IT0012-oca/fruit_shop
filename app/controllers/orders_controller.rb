@@ -12,7 +12,8 @@ class OrdersController < ApplicationController
   def confirm
     @order = Order.new(order_params)          # フォームから送信された注文情報を取得
     @product = Product.find(order_params[:product_id]) # 注文対象の商品を取得
-
+    @order.user = current_user  # 現在のユーザーを注文に紐付け
+    
     if @order.valid?
         @order.total_price = cal_total_price(@product.price, @order.count) # 合計金額を計算して設定
       else
